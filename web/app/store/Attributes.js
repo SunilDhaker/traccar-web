@@ -15,11 +15,12 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-Ext.define('Traccar.store.Attributes', {
-    extend: 'Ext.data.Store',
-    model: 'Traccar.model.Attribute',
+    Ext.define('Traccar.store.Attributes', {
+        extend: 'Ext.data.Store',
+        model: 'Traccar.model.Attribute',
 
-    sorters: [{
-        property: 'priority'
-    }]
-});
+        sorters: [{
+            property: 'priority'
+        }]
+    });
+

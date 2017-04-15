@@ -16,6 +16,7 @@
  */
 
 Ext.define('Traccar.AttributeFormatter', {
+
     singleton: true,
 
     coordinateFormatter: function (key, value) {

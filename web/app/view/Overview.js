@@ -15,17 +15,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-Ext.define('Traccar.view.Main', {
+Ext.define('Traccar.view.Overview', {
     extend: 'Ext.container.Viewport',
-    alias: 'widget.main',
+    alias: 'widget.overview',
 
     requires: [
-        'Traccar.view.edit.Devices',
-        'Traccar.view.State',
+        'Traccar.view.DevicesStates',
         'Traccar.view.Report',
-        'Traccar.view.map.Map'
     ],
-    controller : [],
 
     layout: 'border',
 
@@ -36,27 +33,9 @@ Ext.define('Traccar.view.Main', {
     },
 
     items: [{
-        region: 'west',
-        layout: 'border',
-        width: Traccar.Style.deviceWidth,
-        title: Strings.devicesAndState,
-        titleCollapse: true,
-        floatable: false,
-        stateful: true,
-        stateId: 'devices-and-state-panel',
-
-        defaults: {
-            split: true,
-            flex: 1
-        },
-
-        items: [{
-            region: 'center',
-            xtype: 'devicesView'
-        }, {
-            region: 'south',
-            xtype: 'stateView'
-        }]
+        region: 'center',
+        xtype: 'devicesStatesView',
+        collapsible: false
     }, {
         region: 'south',
         xtype: 'reportView',
@@ -64,10 +43,6 @@ Ext.define('Traccar.view.Main', {
         collapsed: true,
         titleCollapse: true,
         floatable: false
-    }, {
-        region: 'center',
-        xtype: 'mapView',
-        collapsible: false,
-    
     }]
 });
+

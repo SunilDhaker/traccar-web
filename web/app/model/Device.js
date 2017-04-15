@@ -61,3 +61,4 @@ Ext.define('Traccar.model.Device', {
         name: 'attributes'
     }]
 });
+

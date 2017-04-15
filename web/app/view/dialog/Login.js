@@ -23,6 +23,7 @@ Ext.define('Traccar.view.dialog.Login', {
         'Traccar.view.dialog.LoginController'
     ],
 
+
     controller: 'login',
 
     header: false,
@@ -42,12 +43,14 @@ Ext.define('Traccar.view.dialog.Login', {
 
         items: [{
             xtype: 'image',
-            src: 'logo.svg',
+            src: 'logo.png',
             alt: Strings.loginLogo,
             width: 180,
             height: 48,
             style: {
                 display: 'block',
+                background: 'grey',
+                padding : '10px',
                 margin: '10px auto 25px'
             }
         }, {

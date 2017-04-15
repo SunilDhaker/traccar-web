@@ -21,13 +21,22 @@ Ext.define('Traccar.controller.Root', {
     requires: [
         'Traccar.view.dialog.Login',
         'Traccar.view.Main',
+        'Traccar.view.Overview',
         'Traccar.view.MainMobile',
         'Traccar.model.Position'
     ],
 
     init: function () {
         Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+        this.listen({
+            controller: {
+                '*': {
+                    switchmap: this.switchToMap
+                }
+            }
+        });
     },
+
 
     onLaunch: function () {
         Ext.Ajax.request({
@@ -66,7 +75,7 @@ Ext.define('Traccar.controller.Root', {
             this.login = Ext.create('widget.login', {
                 listeners: {
                     scope: this,
-                    login: this.onLogin
+                    login: this.onLogin,
                 }
             });
             this.login.show();
@@ -82,6 +91,7 @@ Ext.define('Traccar.controller.Root', {
         var attribution, eventId;
         Ext.getStore('Groups').load();
         Ext.getStore('Geofences').load();
+        Ext.getStore('Positions').load();
         Ext.getStore('Calendars').load();
         Ext.getStore('AttributeAliases').load();
         this.initReportEventTypesStore();
@@ -96,10 +106,16 @@ Ext.define('Traccar.controller.Root', {
             attribution.remove();
         }
         if (Traccar.app.isMobile()) {
-            Ext.create('widget.mainMobile');
+            this.main2 = Ext.create('widget.mainMobile');
         } else {
-            Ext.create('widget.main');
+            //if(window.location)
+           if(this.getParameterByName("view") == 'map'){
+            this.main2 = Ext.create('widget.main');
+           }else{
+              this.main2 = Ext.create('widget.overview');
+           }
         }
+
         eventId = Ext.Object.fromQueryString(window.location.search).eventId;
         if (eventId) {
             this.fireEvent('showsingleevent', eventId);
@@ -112,6 +128,12 @@ Ext.define('Traccar.controller.Root', {
             this.beepSound = new Audio('beep.wav');
         }
         this.beepSound.play();
+    },
+
+    switchToMap: function () {
+        //this.main2.destroy();
+        //Ext.create('widget.main');
+        window.location = window.location + "?view=map"
     },
 
     soundPressed: function () {
@@ -191,8 +213,8 @@ Ext.define('Traccar.controller.Root', {
                     status: array[i].status,
                     lastUpdate: array[i].lastUpdate
                 }, {
-                    dirty: false
-                });
+                        dirty: false
+                    });
             }
         }
     },
@@ -243,6 +265,18 @@ Ext.define('Traccar.controller.Root', {
             }
         }
     },
+ getParameterByName : function(name, url) {
+                if (!url) {
+                    url = window.location.href;
+                }
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            } , 
+
 
     zoomToAllDevices: function () {
         var lat, lon, zoom;
@@ -267,7 +301,7 @@ Ext.define('Traccar.controller.Root', {
                 if (success) {
                     for (i = 0; i < records.length; i++) {
                         value = records[i].get('type');
-                        store.add({type: value, name: Traccar.app.getEventString(value)});
+                        store.add({ type: value, name: Traccar.app.getEventString(value) });
                     }
                 }
             }

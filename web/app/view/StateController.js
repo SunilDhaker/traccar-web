@@ -142,6 +142,7 @@ Ext.define('Traccar.view.StateController', {
     selectDevice: function (device) {
         var position;
         this.deviceId = device.get('id');
+        var lp = Ext.getStore('LatestPositions');
         position = Ext.getStore('LatestPositions').findRecord('deviceId', this.deviceId, 0, false, false, true);
         if (position) {
             this.position = position;
